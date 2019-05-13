@@ -1,4 +1,8 @@
 {
     "debug": true,
-    "tileSize": 25
+    "tileSize": 25,
+    "start_x": 4,
+    "start_y": 4,
+    "goal_x": -4,
+    "goal_y": -4
 }
