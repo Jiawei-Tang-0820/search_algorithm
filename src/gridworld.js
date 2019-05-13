@@ -1,20 +1,18 @@
-import React from 'react';
+import Tile from './tile';
 
-class GridWorld extends React.Component {
+class GridWorld {
 
-    
+    constructor(row, col) {
+        this.row = row;
+        this.col = col;
+        this.data = [];
 
-    render() {
-        return(
-            <div className='fullscreen-background'>
-                <div className='side-panel'>
-
-                </div>
-                <div className='grid-world'>
-
-                </div>
-            </div>
-        );
+        for (let y = 0; y < this.row; y++) {
+            this.data.push([]);
+            for (let x = 0; x < this.col; x++) {
+                this.data[y].push(new Tile('normal', 0));
+            }
+        }
     }
 }
 

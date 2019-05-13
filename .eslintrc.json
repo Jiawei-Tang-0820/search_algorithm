@@ -22,6 +22,7 @@
     "rules": {
         "no-unused-vars": "off",
         "no-mixed-spaces-and-tabs": "error",
+        "no-console":"off",
         "semi": "error",
         "quotes": ["warn", "single"]
     }
