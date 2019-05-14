@@ -99,7 +99,7 @@ class GridWorld {
     }
 
     arrayComp(a, b) {
-        if (a.length == b.length) {
+        if (a.length === b.length) {
             for (let i = 0; i < a.length; i++) {
                 if (a[i] !== b[i]) {
                     return false;
@@ -220,7 +220,7 @@ class GridWorld {
 
                 // update frontier and set prev
                 const index = this.arrayIndexOf(this.pfrontier, nCoord, this.pArrayComp.bind(this));
-                if (index != -1) {
+                if (index !== -1) {
                     if (nhgCost < this.pfrontier[index][0]) {
                         this.pfrontier[index] = [nhgCost, nrealCost, nCoord];
                         nTile.prev = tile;

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import HomeView from './view';
+import HomeView from './mainview';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<HomeView/>, document.getElementById('root'));

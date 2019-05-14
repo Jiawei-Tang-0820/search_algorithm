@@ -14,6 +14,7 @@ div.fill {
 div.side-panel {
   width: 20%;
   height: 100%;
+  text-align: center;
   float: left;
   background-color: #8aaae5;
 }

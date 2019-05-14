@@ -8,12 +8,6 @@ class GridView extends React.Component {
     constructor(props) {
         super(props);
 
-        if (props.coef !== undefined) {
-            this.coef = props.coef;
-        } else {
-            this.coef = 1.2;
-        }
-
         // store element reference
         this.rootView = React.createRef();
 
@@ -53,7 +47,12 @@ class GridView extends React.Component {
         this.setState({world: this.state.world});
     }
 
-    startAStar() {
+    startAStar(coef) {
+        if (coef !== '') {
+            this.coef = coef;
+        } else {
+            this.coef = 1.2;
+        }
         this.state.world.aStar(this.H.bind(this));
         this.setState({world: this.state.world});
     }
@@ -63,8 +62,12 @@ class GridView extends React.Component {
         this.setState({world: this.state.world});
     }
 
+    clear() {
+        this.state.world.clear();
+        this.setState({world: this.state.world});
+    }
+
     onTileClicked(data) {
-        log(data);
         const world = this.state.world;
         world.data[data[0]][data[1]].type = 'obstacle';
         this.setState({world: world});
