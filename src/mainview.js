@@ -10,37 +10,49 @@ class HomeView extends React.Component {
         this.gridView = React.createRef();
         this.input = React.createRef();
         
+        // initialize state
         this.state = {coef: ''};
     }
 
-    componentDidMount() {
-        
-    }
-
+    /*
+     * Handles BFS button click
+     */
     onBFSClicked(e) {
         if (this.gridView) {
             this.gridView.current.startBFS();
         }
     }
 
+    /*
+     * Handles A* button click
+     */
     onAStarClicked(e) {
         if (this.gridView) {
             this.gridView.current.startAStar(this.state.coef);
         }
     }
 
+    /*
+     * Handles Reset button click
+     */
     onResetClicked(e) {
         if (this.gridView) {
             this.gridView.current.reset();
         }
     }
 
+    /*
+     * Handles Clear button click
+     */
     onClearClicked(e) {
         if (this.gridView) {
             this.gridView.current.clear();
         }
     }
 
+    /*
+     * Handles coefficient input changes
+     */
     onInputChanged(e) {
         this.setState({coef: e.target.value});
     }
@@ -48,6 +60,8 @@ class HomeView extends React.Component {
     render() {
         return (
             <div className='main-background'>
+
+                {/* control panel */}
                 <div className='side-panel'>
                 <div>
                     <button onClick={this.onBFSClicked.bind(this)}>BFS</button>
@@ -58,14 +72,16 @@ class HomeView extends React.Component {
                 <div>
                     Enter heuristic for A*:
                 </div>
-                <div>
-                    <input
-                        type='number'
-                        value={this.state.coef}
-                        onChange={this.onInputChanged.bind(this)}
-                    />
+                    <div>
+                        <input
+                            type='number'
+                            value={this.state.coef}
+                            onChange={this.onInputChanged.bind(this)}
+                        />
+                    </div>
                 </div>
-                </div>
+
+                {/* visualization */}
                 <div className='grid-world' ref={this.divGridWorld}>
                     <GridView ref={this.gridView}/>
                 </div>

@@ -3,17 +3,21 @@ import cfg from './config';
 
 class GridWorld {
 
+    /*
+     * Construct a 2D array to hold all the tiles 
+     */
     constructor(row, col) {
         this.row = row;
         this.col = col;
         this.data = [];
 
         // initialize set
-        this.frontier = [];
-        this.pfrontier = [];
+        this.frontier = []; // list frontier
+        this.pfrontier = []; // priority queue frontier
         this.visited = [];
         this.path = [];
 
+        // initialize the tiles
         for (let y = 0; y < this.row; y++) {
             this.data.push([]);
             for (let x = 0; x < this.col; x++) {
@@ -31,12 +35,17 @@ class GridWorld {
         this.placeStartAndGoal();
     }
 
+    /*
+     * set the starting and ending points 
+     */
     placeStartAndGoal() {
         this.data[this.startY][this.startX].type = 'start';
         this.data[this.goalY][this.goalX].type = 'goal';
     }
 
-    // clear the entire borad
+    /* 
+     * clears the entire borad, including walls
+     */ 
     clear() {
         for (let y = 0; y < this.row; y++) {
             for (let x = 0; x < this.col; x++) {
@@ -50,7 +59,9 @@ class GridWorld {
         this.placeStartAndGoal();
     }
 
-    // reset the borad state, keep obstacles
+    /* 
+     * reset the entire borad
+     */ 
     reset() {
         for (let y = 0; y < this.row; y++) {
             for (let x = 0; x < this.col; x++) {
@@ -63,6 +74,9 @@ class GridWorld {
         this.path = [];
     }
 
+    /*
+     * Returns the neighbors of a tile, excluding out of bound ones
+     */
     getNeighbors(row, col) {
 
         // get up down left right neighors
@@ -84,6 +98,9 @@ class GridWorld {
         return neighbors;
     }
 
+    /* 
+     * Returns the set that the tile is in
+     */ 
     getStatus(row, col) {
         if (this.arrayIncludes(this.path, [row, col])) {
             return 'path';
@@ -98,6 +115,9 @@ class GridWorld {
         }
     }
 
+    /*
+     * Returns true if array a and array b are the same 
+     */
     arrayComp(a, b) {
         if (a.length === b.length) {
             for (let i = 0; i < a.length; i++) {
@@ -110,10 +130,16 @@ class GridWorld {
         return false;
     }
 
+    /* 
+     * Used to compare the object inside pfrontier
+     */ 
     pArrayComp(a, b) {
         return this.arrayComp(a[2], b);
     }
 
+    /* 
+     * Checks if an array is included in an array of array
+     */ 
     arrayIncludes(target, item, compare = this.arrayComp) {
         for (let i = 0; i < target.length; i++) {
             if (compare(target[i], item)) {
@@ -123,6 +149,9 @@ class GridWorld {
         return false;
     }
 
+    /* 
+     * Returns the first occurence of an array that is in an array of array
+     */ 
     arrayIndexOf(target, item, compare = this.arrayComp) {
         for (let i = 0; i < target.length; i++) {
             if (compare(target[i], item)) {
@@ -132,6 +161,9 @@ class GridWorld {
         return -1;
     }
 
+    /* 
+     * Breath first search
+     */ 
     bfs() {
 
         // initial condition
@@ -175,6 +207,9 @@ class GridWorld {
         }
     }
 
+    /* 
+     * A* search
+     */ 
     aStar(H) {
         // initial condition
         this.reset();
@@ -202,7 +237,7 @@ class GridWorld {
             const neigbhors = this.getNeighbors(coord[0], coord[1]);
             for (let i = 0; i < neigbhors.length; i++) {
                 
-                // make sure tha neighbor is not in the visited nor explored set
+                // make sure tha neighbor is not in the visited set
                 const nCoord = neigbhors[i];
                 if (this.arrayIncludes(this.visited, nCoord)) {
                     continue;
@@ -233,6 +268,9 @@ class GridWorld {
         }
     }
 
+    /* 
+     * Helper to remove the smallest items in an array (there is a faster way using min heap)
+     */ 
     removeMin(array, compare) {
         let best = undefined;
         let bestIndex = 0;
@@ -245,6 +283,9 @@ class GridWorld {
         return array.splice(bestIndex, 1)[0];
     }
 
+    /* 
+     * Link the prevs together to get a path
+     */ 
     linkPath(tile) {
         let res = [];
         let curr = tile;

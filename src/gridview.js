@@ -19,6 +19,9 @@ class GridView extends React.Component {
         // register interface
     }
 
+    /*
+     * Will be called once the view finishes init 
+     */
     componentDidMount() {
         
         // initialize attributes
@@ -38,15 +41,25 @@ class GridView extends React.Component {
         log('world size: ' + width + ' x ' + height);
     }
 
+    /*
+     * Heuristic function, this one calculates the Euclidiean distance between two point
+     * and multiply the result by a coefficient
+     */
     H(y1, x1, y2, x2) {
         return this.coef * Math.sqrt(Math.pow(y1 - y2, 2) + Math.pow(x1 - x2, 2));
     }
 
+    /*
+     * Start BFS search
+     */
     startBFS() {
         this.state.world.bfs();
         this.setState({world: this.state.world});
     }
 
+    /*
+     * Start A* search
+     */
     startAStar(coef) {
         if (coef !== '') {
             this.coef = coef;
@@ -57,22 +70,34 @@ class GridView extends React.Component {
         this.setState({world: this.state.world});
     }
 
+    /*
+     * reset the grid
+     */
     reset() {
         this.state.world.reset();
         this.setState({world: this.state.world});
     }
 
+    /*
+     * clear the grid
+     */
     clear() {
         this.state.world.clear();
         this.setState({world: this.state.world});
     }
 
+    /*
+     * Place a wall when the user clicks on a tile
+     */
     onTileClicked(data) {
         const world = this.state.world;
         world.data[data[0]][data[1]].type = 'obstacle';
         this.setState({world: world});
     }
 
+    /*
+     * Display the tile at row, column
+     */
     drawTile(y, x) {
 
         const world = this.state.world;
@@ -104,6 +129,9 @@ class GridView extends React.Component {
         return(<div className={className} onClick={(() => this.onTileClicked([y,x]))}><div className={statusClass}/></div>);
     }
 
+    /*
+     * Display the grid
+     */
     drawWorld() {
 
         // only draw the view if the world is initialized
