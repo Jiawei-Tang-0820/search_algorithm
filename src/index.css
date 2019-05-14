@@ -55,3 +55,21 @@ div.tile-goal {
 div.tile-obstacle {
   background-color: gray; 
 }
+
+div.tile-path {
+  width: 25px;
+  height: 25px;
+  background-color: rgba(0, 0, 255, 0.5);
+}
+
+div.tile-frontier {
+  width: 25px;
+  height: 25px;
+  background-color: rgba(200, 200, 0, 0.5);
+}
+
+div.tile-visited {
+  width: 25px;
+  height: 25px;
+  background-color: rgba(0, 255, 0, 0.5);
+}

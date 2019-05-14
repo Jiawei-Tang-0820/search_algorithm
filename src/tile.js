@@ -1,9 +1,10 @@
 class Tile {
 
-    constructor(type, cost) {
+    constructor(type, cost, row, col) {
         this.type = type;
-        this.cost = cost;
         this.prev = undefined;
+        this.row = row;
+        this.col = col;
     }
 }
 

@@ -8,6 +8,12 @@ class GridView extends React.Component {
     constructor(props) {
         super(props);
 
+        if (props.coef !== undefined) {
+            this.coef = props.coef;
+        } else {
+            this.coef = 1.2;
+        }
+
         // store element reference
         this.rootView = React.createRef();
 
@@ -38,30 +44,61 @@ class GridView extends React.Component {
         log('world size: ' + width + ' x ' + height);
     }
 
-    startBFS() {
-        this.state.world.bfs(function(){
-            this.setState({world: this.state.world});
-        }.bind(this));
+    H(y1, x1, y2, x2) {
+        return this.coef * Math.sqrt(Math.pow(y1 - y2, 2) + Math.pow(x1 - x2, 2));
     }
 
-    drawTile(tile) {
+    startBFS() {
+        this.state.world.bfs();
+        this.setState({world: this.state.world});
+    }
+
+    startAStar() {
+        this.state.world.aStar(this.H.bind(this));
+        this.setState({world: this.state.world});
+    }
+
+    reset() {
+        this.state.world.reset();
+        this.setState({world: this.state.world});
+    }
+
+    onTileClicked(data) {
+        log(data);
+        const world = this.state.world;
+        world.data[data[0]][data[1]].type = 'obstacle';
+        this.setState({world: world});
+    }
+
+    drawTile(y, x) {
+
+        const world = this.state.world;
+        const tile = world.data[y][x];
 
         // draw tile differently base on type
-        let className;
+        let className = 'tile';
         if (tile.type === 'normal') {
-            className = 'tile tile-normal';
+            className += ' tile-normal';
         } else if (tile.type === 'start') {
-            className = 'tile tile-start';
+            className += ' tile-start';
         } else if (tile.type === 'goal') {
-            className = 'tile tile-goal';
+            className += ' tile-goal';
         } else if (tile.type === 'obstacle') {
-            className = 'tile tile-obstacle';
+            className += ' tile-obstacle';
         }
 
         // color the tile if it is in froniter or explored set
-
-
-        return(<div className={className}></div>);
+        // const status = world.getStatus(y, x);
+        const statusName = world.getStatus(y, x);
+        let statusClass = 'tile-normal';
+        if (statusName === 'frontier') {
+            statusClass = 'tile-frontier';
+        } else if (statusName === 'visited') {
+            statusClass = 'tile-visited';
+        } else if (statusName === 'path') {
+            statusClass = 'tile-path';
+        }
+        return(<div className={className} onClick={(() => this.onTileClicked([y,x]))}><div className={statusClass}/></div>);
     }
 
     drawWorld() {
@@ -76,7 +113,7 @@ class GridView extends React.Component {
             for (let y = 0; y < world.row; y++) {
                 let rowView = [];
                 for (let x = 0; x < world.col; x++) {
-                    rowView.push(this.drawTile(world.data[y][x]));
+                    rowView.push(this.drawTile(y, x));
                 }
                 gridView.push(<div>{rowView}</div>);
             }
