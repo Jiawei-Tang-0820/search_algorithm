@@ -58,6 +58,15 @@ class GridView extends React.Component {
     }
 
     /*
+     * Start Dijkstra search
+     */
+
+    startDijkstra() {
+        this.state.world.dijkstra();
+        this.setState({wrold: this.state.world});
+    }
+
+    /*
      * Start A* search
      */
     startAStar(coef) {

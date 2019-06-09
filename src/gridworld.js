@@ -207,6 +207,67 @@ class GridWorld {
         }
     }
 
+    /*
+     * Dijkstra search
+     */
+
+    dijkstra() {
+        // initial condition
+        this.reset();
+        this.pfrontier.push([0, 0, [this.startY, this.startX]]);
+
+        // a-star search
+        while (this.pfrontier.length > 0) {
+
+            // get the best node
+            const pair = this.removeMin(this.pfrontier, function(a, b) {return a[1] < b[1];});
+            const cost = pair[1];
+            const coord = pair[2];
+            const tile = this.data[coord[0]][coord[1]];
+
+            // visit this node
+            this.visited.push(coord);
+
+            // check if this is goal node
+            if (tile.type === 'goal') {
+                this.path = this.linkPath(tile);
+                break;
+            }
+
+            // push neigbhors onto the pqueue
+            const neigbhors = this.getNeighbors(coord[0], coord[1]);
+            for (let i = 0; i < neigbhors.length; i++) {
+                
+                // make sure tha neighbor is not in the visited set
+                const nCoord = neigbhors[i];
+                if (this.arrayIncludes(this.visited, nCoord)) {
+                    continue;
+                }
+
+                // dont add obstacles
+                const nTile = this.data[nCoord[0]][nCoord[1]];
+                if (nTile.type === 'obstacle') {
+                    continue;
+                }
+
+                // calculate the cost
+                const nCost = cost + 1;
+
+                // update frontier and set prev
+                const index = this.arrayIndexOf(this.pfrontier, nCoord, this.pArrayComp.bind(this));
+                if (index !== -1) {
+                    if (nCost < this.pfrontier[index][0]) {
+                        this.pfrontier[index] = [0, nCost, nCoord];
+                        nTile.prev = tile;
+                    }
+                } else {
+                    this.pfrontier.push([0, nCost, nCoord]);
+                    nTile.prev = tile;
+                }
+            }
+        }
+    }
+
     /* 
      * A* search
      */ 
